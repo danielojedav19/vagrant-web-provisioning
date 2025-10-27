@@ -1,12 +1,23 @@
 # Taller Vagrant + Provisionamiento con Shell
 
-## Pasos
-1. Clonar este repositorio.
-2. Ejecutar `vagrant up` para levantar las máquinas.
-3. Acceder a la máquina web en: http://192.168.56.10
-4. Verificar `index.html` y `info.php`.
+Repositorio del taller (fork de jmaquin0) realizado por **danielojedav19**.  
+Se crean 2 VMs (web y db) con **Vagrant + VirtualBox** y se provisionan con **Shell**.
 
-## Reto
-- Completar `provision-db.sh` para instalar PostgreSQL.
-- Crear una base de datos y tabla.
-- Conectar la página PHP a la base de datos y mostrar datos.
+## Topologia e IPs
+- **web**: 192.168.56.10 (Ubuntu 20.04)  Apache2 + PHP 7.4 + `php-pgsql`
+- **db** : 192.168.56.11 (Ubuntu 20.04)  PostgreSQL 12 (BD `demoapp`, user `demo`/`demo123`)
+- Red privada: `192.168.56.0/24`
+
+## Requisitos en el host
+- VirtualBox, Vagrant, Git (en Windows: instalar y reiniciar).
+
+## Como ejecutar
+```bash
+git clone https://github.com/danielojedav19/vagrant-web-provisioning.git
+cd vagrant-web-provisioning
+vagrant up db
+vagrant up web
+# Reprovisionar si editas scripts:
+vagrant provision db
+vagrant provision web
+
