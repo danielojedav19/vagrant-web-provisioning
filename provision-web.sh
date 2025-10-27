@@ -1,17 +1,23 @@
 #!/usr/bin/env bash
+set -e
+export DEBIAN_FRONTEND=noninteractive
 
-# Actualizar paquetes
-sudo apt-get update -y
+# Paquetes base
+apt-get update -y
+apt-get install -y apache2 php libapache2-mod-php php-pgsql rsync
 
-# Instalar Apache y PHP
-sudo apt-get install -y apache2 php libapache2-mod-php
+# Asegurar Apache habilitado y funcionando
+systemctl enable apache2
+systemctl restart apache2
 
-# Habilitar Apache al inicio
-sudo systemctl enable apache2
-sudo systemctl start apache2
+# Desplegar contenido desde carpeta compartida /vagrant/www a /var/www/html
+mkdir -p /var/www/html
+if [ -d /vagrant/www ]; then
+  rsync -a --delete /vagrant/www/ /var/www/html/
+fi
 
-# Copiar archivos del proyecto (carpeta compartida Vagrant)
-sudo cp -r /vagrant/www/* /var/www/html/
+# Permisos recomendados
+chown -R www-data:www-data /var/www/html
+chmod -R 0755 /var/www/html
 
-# Dar permisos
-sudo chown -R www-data:www-data /var/www/html
+echo "[WEB] Apache+PHP (con php-pgsql) listos. Sitio desplegado en /var/www/html"
